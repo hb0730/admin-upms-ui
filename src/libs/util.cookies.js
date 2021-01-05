@@ -23,6 +23,21 @@ cookies.set = function (name = 'default', value = '', cookieSetting = {}) {
 cookies.get = function (name = 'default') {
   return Cookies.get(`d2admin-${process.env.VUE_APP_VERSION}-${name}`)
 }
+/**
+ * Cookie
+ * @param {string} name 
+ */
+cookies.defaultGet=function(name="default"){
+  return Cookies.get(name);
+}
+
+/**
+ * 删除cookie
+ * @param {string} name 
+ */
+cookies.defaultRemove=function(name="default"){
+  return Cookies.remove(name)
+}
 
 /**
  * @description 拿到 cookie 全部的值

@@ -11,6 +11,9 @@ import util from '@/libs/util.js'
 // 路由数据
 import routes from './routes'
 
+import {login} from "@/api/sys.login.js"
+import {authorization} from "@/api/constant"
+
 // fix vue-router NavigationDuplicated
 const VueRouterPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push (location) {
@@ -41,22 +44,25 @@ router.beforeEach(async (to, from, next) => {
   NProgress.start()
   // 关闭搜索面板
   store.commit('d2admin/search/set', false)
+  console.info("debug>>>")
   // 验证当前路由所有的匹配中是否需要有登录验证的
   if (to.matched.some(r => r.meta.auth)) {
     // 这里暂时将cookie里是否存有token作为验证是否登录的条件
     // 请根据自身业务需要修改
-    const token = util.cookies.get('token')
-    if (token && token !== 'undefined') {
+    const accessToken =util.cookies.defaultGet(authorization)
+    // const token = util.cookies.get('token')
+    if (accessToken && accessToken !== 'undefined') {
       next()
     } else {
       // 没有登录的时候跳转到登录界面
       // 携带上登陆成功之后需要跳转的页面完整路径
-      next({
-        name: 'login',
-        query: {
-          redirect: to.fullPath
-        }
-      })
+      // next({
+      //   name: 'login',
+      //   query: {
+      //     redirect: to.fullPath
+      //   }
+      // })
+      login(process.env.VUE_APP_LOGOU_CALLBACK)
       // https://github.com/d2-projects/d2-admin/issues/138
       NProgress.done()
     }

@@ -5,6 +5,7 @@ import { get, isEmpty } from 'lodash'
 import qs from 'qs'
 import util from '@/libs/util'
 import store from '@/store'
+import { authorization, bearer } from './constant'
 
 /**
  * @description 记录和显示错误
@@ -122,10 +123,10 @@ function stringify (data) {
  */
 function createRequest (service) {
   return function (config) {
-    const token = util.cookies.get('token')
+    const token = util.cookies.defaultGet(authorization)
     const configDefault = {
       headers: {
-        Authorization: token,
+        "authorization": bearer+token,
         'Content-Type': get(config, 'headers.Content-Type', 'application/json')
       },
       timeout: 5000,
@@ -141,6 +142,8 @@ function createRequest (service) {
     }
     // 当需要以 form 形式发送时 处理发送的数据
     // 请根据实际需要修改
+    console.info(option.headers)
+    debugger
     if (!isEmpty(option.data) && option.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
       option.data = stringify(option.data)
     }

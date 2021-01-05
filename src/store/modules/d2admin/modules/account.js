@@ -2,7 +2,7 @@ import { Message, MessageBox } from 'element-ui'
 import util from '@/libs/util.js'
 import router from '@/router'
 import { SYS_USER_LOGIN } from '@/api/sys.user.js'
-
+import {SYS_LOGOUT} from "@/api/sys.login.js"
 export default {
   namespaced: true,
   actions: {
@@ -45,8 +45,9 @@ export default {
         util.cookies.remove('uuid')
         // 清空 vuex 用户信息
         await dispatch('d2admin/user/set', {}, { root: true })
-        // 跳转路由
-        router.push({ name: 'login' })
+        // // 跳转路由
+        // router.push({ name: 'login' })
+        SYS_LOGOUT()
       }
       // 判断是否需要确认
       if (confirm) {
